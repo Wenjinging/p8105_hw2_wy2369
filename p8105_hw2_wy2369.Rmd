@@ -97,9 +97,35 @@ trans_ent %>%
 
 
 
-### Problem 2
+# Problem 2
+
+### Import, clean, and organize **Mr. Trash Wheel** sheet.
+
+Use code `read_excel` to read, and `janitor::clean_names()` to clean data from `Trash Wheel Collection Data.xlsx`. Omit non-data rows and columns, and then round the number of sports balls to the nearest integer. After that, convert the result to an integer variable by using `as.integer`.
+
+```{r}
+mrtrash_df = 
+  read_excel(
+    "./hw2data/Trash Wheel Collection Data.xlsx",
+    sheet = "Mr. Trash Wheel",
+    range = "A2:N550") %>% 
+  janitor::clean_names()
 
 
-### Problem 3
+```
+
+### Import, clean, and organize **Professor Trash Wheel** sheet.
+
+Use 
+
+  drop_na (c("Dumpster") )
+  mutate(sports_balls = round(sports_balls,digits = 0) 
+
+
+
+
+
+
+# Problem 3
 
 
