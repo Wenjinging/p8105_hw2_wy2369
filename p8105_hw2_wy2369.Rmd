@@ -132,8 +132,9 @@ prof_trash_df =
 ```
 
   
-### Combind the two datasets.
+### Combine the two datasets.
 
+Use code `bind_rows` to combine `mr_trash_df` and `prof_trash_df` , and get `trash_tidy` dataset.
 ```{r}
 trash_tidy = 
   bind_rows(mr_trash_df,prof_trash_df) %>%
@@ -143,6 +144,26 @@ trash_tidy
 ```
 
 
+### Write a short description and answer questions.
+
+In trash_tidy dataset, there are 15 key variables, for example month, date, weight_tons, and glass_bottles. The data frame has **`r nrow(trash_tidy)`** rows and **`r ncol(trash_tidy)`** columns. 
+
+```{r include = TRUE}
+weight_proTrash = 
+  trash_tidy %>%
+  filter(data_source == "prof_trash_wheel") 
+  sum(weight_proTrash$weight_tons)
+```
+The total weight of trash collected by Professor Trash Wheel is **190.12**.
+
+
+```{r}
+year_2020 = 
+  trash_tidy %>%
+  filter(data_source == "mr_trash_wheel", year == 2020)
+  sum(year_2020$sports_balls)
+```
+The total number of sports balls collected by Mr. Trash Wheel in 2020 is **856**.
 
 
 # Problem 3
