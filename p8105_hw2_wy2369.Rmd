@@ -172,7 +172,7 @@ The total number of sports balls collected by Mr. Trash Wheel in 2020 is **856**
 
 Use this code chunk to read and organize `pols-month.csv` dataset. Use `separate()` to break up the variable **mon** into integer variables year, month, and day; Use `month.abb` to replace month number with month name. Create a president variable taking values "DEM" and "GOP", and remove prez_dem, prez_gop and the day variable in the dataset.
 
-```{r}
+```{r message = FALSE}
 pols_month =
   read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
   janitor::clean_names() %>%
@@ -189,7 +189,7 @@ pols_month
 
 Use this code chunk to read and organize `snp.csv` dataset, and arrange according to year and month, and organize so that year and month are the leading columns.
 
-```{r }
+```{r message = FALSE}
 snp_df =
   read_csv("./fivethirtyeight_datasets/snp.csv") %>%
   janitor::clean_names() %>%
@@ -210,7 +210,7 @@ snp_df
 
 Use this code chunk to read and organize `unemployment.csv` dataset. This process will involve switching from “wide” to “long” format using `pivot_longer()`.
 
-```{r }
+```{r message = FALSE}
 unemploy_df =
   read_csv("./fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names() %>%
@@ -228,7 +228,7 @@ unemploy_df
 
 
 
-### Join the datasets 
+### Join the datasets. 
 
 Merging `snp_df` into `pols_month`, and merging `unemploy_df` into the result using this code chunk. 
 
@@ -242,4 +242,13 @@ snp_pols_unemlop_tidy =
 snp_pols_unemlop_tidy
 ```
 
+### Explain the resulting dataset. 
 
+For `pols_month`, it has `r nrow(pols_month)` rows and `r ncol(pols_month)` columns. There are **9** distinct variables which include year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_demm, rep_dem, and president. The range of year in the dataset is **from 1947 to 2015**.
+
+For `snp_df`, it has `r nrow(snp_df)` rows and `r ncol(snp_df)` columns. There are **3** distinct variables which include year, month, and close in the dataset. The range of year is **from 1950 to 2015**.
+
+For `unemploy_df`, it has `r nrow(unemploy_df)` rows and `r ncol(unemploy_df)` columns. There are **3** distinct variables which include year, month, and unemployment_rate in the dataset. The range of year is **from 1948 to 2015**.
+
+
+Use code `left_join()` to combine these datasets. In the resulting dataset `snp_pols_unemlop_tidy`, it has `r nrow(snp_pols_unemlop_tidy)` rows and `r ncol(snp_pols_unemlop_tidy)` columns, and **11** key variables which are year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_demm, rep_dem, president, close, and unemployment_rate. The range of year in the resulting dataset is **from 1947 to 2015**.
