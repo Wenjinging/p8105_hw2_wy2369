@@ -178,8 +178,8 @@ pols_month =
   janitor::clean_names() %>%
   separate(mon, into = c("year","month","day") ) %>%
   mutate(
-    year = as.numeric(year),
-    month = as.numeric(month),
+    year = as.integer(year),
+    month = as.integer(month),
     month = month.abb[month],
     president = ifelse( prez_dem == 1, "DEM","GOP" )) %>%
   select(-prez_dem,-prez_gop,-day)
@@ -189,34 +189,57 @@ pols_month
 
 Use this code chunk to read and organize `snp.csv` dataset, and arrange according to year and month, and organize so that year and month are the leading columns.
 
-```{r}
+```{r }
 snp_df =
   read_csv("./fivethirtyeight_datasets/snp.csv") %>%
   janitor::clean_names() %>%
   mutate(date = as.Date(date, "%m/%d/%y")) %>%
   separate(date, into = c("year","month","day") ) %>%
   mutate(
-    year = as.numeric(year),
+    year = as.integer(year),
     year = ifelse(year > 2049, year-100, year),
-    month = as.numeric(month),
-    day = as.numeric(day)) %>%
+    month = as.integer(month),
+    day = as.integer(day)) %>%
   arrange(year, month) %>%
   mutate(month = month.abb[month])  %>%
   select(-day)
+
 snp_df
 ```
 
 
+Use this code chunk to read and organize `unemployment.csv` dataset. This process will involve switching from “wide” to “long” format using `pivot_longer()`.
 
-Use this code chunk to read and organize `unemployment.csv` dataset.
-
-```{r}
+```{r }
 unemploy_df =
   read_csv("./fivethirtyeight_datasets/unemployment.csv") %>%
-  janitor::clean_names()
-
+  janitor::clean_names() %>%
+  mutate(
+    year = as.integer(year)) %>%
+  pivot_longer(
+    jan : dec,
+    names_to = "month",
+    values_to = "unemployment_rate"
+  ) %>%
+  mutate(month = str_to_title(month))
+  
+unemploy_df
 ```
 
 
+
+### Join the datasets 
+
+Merging `snp_df` into `pols_month`, and merging `unemploy_df` into the result using this code chunk. 
+
+```{r}
+snp_pols_tidy = 
+  left_join(pols_month, snp_df, by = c("year","month"))
+
+snp_pols_unemlop_tidy = 
+  left_join(snp_pols_tidy, unemploy_df,by = c("year","month"))
+
+snp_pols_unemlop_tidy
+```
 
 
