@@ -170,7 +170,8 @@ The total number of sports balls collected by Mr. Trash Wheel in 2020 is **856**
 
 ### Read and clean data from `fivethirtyeight` datasets.
 
-Use this code chunk to read and organize `pols-month.csv` dataset.
+Use this code chunk to read and organize `pols-month.csv` dataset. Use `separate()` to break up the variable **mon** into integer variables year, month, and day; Use `month.abb` to replace month number with month name. Create a president variable taking values "DEM" and "GOP", and remove prez_dem, prez_gop and the day variable in the dataset.
+
 ```{r}
 pols_month =
   read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
@@ -186,7 +187,7 @@ pols_month =
 pols_month
 ```
 
-Use this code chunk to read and organize `snp.csv` dataset.
+Use this code chunk to read and organize `snp.csv` dataset, and arrange according to year and month, and organize so that year and month are the leading columns.
 
 ```{r}
 snp_df =
@@ -195,12 +196,17 @@ snp_df =
   mutate(date = as.Date(date, "%m/%d/%y")) %>%
   separate(date, into = c("year","month","day") ) %>%
   mutate(
-    year = as.numeric(year), month = as.numeric(month)) %>%
+    year = as.numeric(year),
+    year = ifelse(year > 2049, year-100, year),
+    month = as.numeric(month),
+    day = as.numeric(day)) %>%
   arrange(year, month) %>%
-  mutate(month = month.abb[month]) 
-
+  mutate(month = month.abb[month])  %>%
+  select(-day)
 snp_df
 ```
+
+
 
 Use this code chunk to read and organize `unemployment.csv` dataset.
 
