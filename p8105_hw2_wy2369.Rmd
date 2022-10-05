@@ -104,24 +104,43 @@ trans_ent %>%
 Use code `read_excel` to read, and `janitor::clean_names()` to clean data from `Trash Wheel Collection Data.xlsx`. Omit non-data rows and columns, and then round the number of sports balls to the nearest integer. After that, convert the result to an integer variable by using `as.integer`.
 
 ```{r}
-mrtrash_df = 
+mr_trash_df = 
   read_excel(
     "./hw2data/Trash Wheel Collection Data.xlsx",
     sheet = "Mr. Trash Wheel",
     range = "A2:N550") %>% 
-  janitor::clean_names()
-
+  janitor::clean_names() %>%
+  drop_na (c(dumpster)) %>%
+  mutate(sports_balls = round(sports_balls,digits = 0) )%>%
+  mutate(sports_balls = as.integer(sports_balls) ,data_source = "mr_trash_wheel",year = as.integer(year))
 
 ```
 
 ### Import, clean, and organize **Professor Trash Wheel** sheet.
 
-Use 
+Use a similar process to organize the data from Professor Trash Wheel sheet.
 
-  drop_na (c("Dumpster") )
-  mutate(sports_balls = round(sports_balls,digits = 0) 
+```{r}
+prof_trash_df = 
+  read_excel(
+    "./hw2data/Trash Wheel Collection Data.xlsx",
+    sheet = "Professor Trash Wheel",
+    range = "A2:M97") %>% 
+  janitor::clean_names() %>%
+  drop_na (c(dumpster)) %>%
+  mutate(data_source = "prof_trash_wheel")
+```
 
+  
+### Combind the two datasets.
 
+```{r}
+trash_tidy = 
+  bind_rows(mr_trash_df,prof_trash_df) %>%
+  janitor::clean_names() 
+
+trash_tidy
+```
 
 
 
